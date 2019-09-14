@@ -1,0 +1,91 @@
+import csv
+import re
+records=[]
+
+def validate_email(email):
+	regex = r'^[a-zA-Z0-9]+[a-zA-Z0-9._]*@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
+	if re.match(regex,email):
+		return email
+	else:
+		return None
+def validate_mobile(mob):
+	regex =r'^[1-9]{1}[0-9]{9}$'
+	if re.match(regex,mob):
+		return mob
+	else:
+		return None
+def validate_name(name):
+	regex =r'^[A-Za-z ]+$'
+	if re.match(regex,name):
+		return name
+	else:
+		return None
+def get_column_sq(data):
+	email=None
+	mobile=None
+	name=None
+	if('@' in data[0]):
+		email=data[0]
+		if(data[1].isnumeric()):
+			mobile=data[1]
+			name=data[2]
+		else:
+			name=data[1]
+			mobile=data[2]
+	elif '@' in data[1]:
+		email=data[1]
+		if(data[0].isnumeric()):
+			mobile=data[0]
+			name=data[2]
+		else:
+			name=data[0]
+			mobile=data[2]
+	else:
+		email=data[2]
+		if(data[0].isnumeric()):
+			mobile=data[0]
+			name=data[1]
+		else:
+			name=data[0]
+			mobile=data[1]
+			
+	
+	return [validate_name(name),validate_email(email),validate_mobile(mobile)]		
+with open("sample1.csv","r") as f:
+	data=csv.reader(f)
+	data=list(data)
+	del(data[0])
+	for i in data:
+		x=get_column_sq(i)
+		if not None in x:
+			records.append(x)
+		
+
+
+with open("sample2.csv","r") as f:
+	data=csv.reader(f)
+	data=list(data)
+	del(data[0])
+	for i in data:
+		x=get_column_sq(i)
+		if not None in x:
+			records.append(x)
+		
+
+
+with open("sample3.csv","r") as f:
+	data=csv.reader(f)
+	data=list(data)
+	del(data[0])
+	for i in data:
+		x=get_column_sq(x)
+		if not None in x:
+			records.append(i)
+		
+
+
+
+with open("output.csv","w+") as f:
+	w=csv.writer(f)
+	w.writerow(["Name","Email","Phone"])
+	w.writerows(records)
